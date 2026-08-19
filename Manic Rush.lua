@@ -1,0 +1,298 @@
+game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
+	game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(255, 0, 0)
+	game.Lighting.MainColorCorrection.Contrast = 1
+	local tween = game:GetService("TweenService")
+	tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(0.5), {Contrast = 0}):Play()
+	local TweenService = game:GetService("TweenService")
+	local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(255, 255, 255)})
+	TW:Play()
+
+		local CameraShaker = require(game.ReplicatedStorage.CameraShaker)
+	local camara = game.Workspace.CurrentCamera
+	local camShake = CameraShaker.new(Enum.RenderPriority.Camera.Value, function(shakeCf)
+		camara.CFrame = camara.CFrame * shakeCf
+	end)
+	camShake:Start()
+	camShake:ShakeOnce(20,10,0,4,0.2,0.2)
+
+	local sound = Instance.new("Sound")
+	sound.SoundId = "rbxassetid://106306557753297"
+	sound.Volume = 10
+	sound.PlaybackSpeed = 1
+	sound.Parent = workspace
+	sound:Play()
+
+local thread = nil
+local threada = nil
+---====== Load spawner ======---
+
+local Spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/Hardcore/refs/heads/main/Deer%20god%20spawner"))()
+
+---====== Create entity ======---
+
+local entity = Spawner:Create({
+	Entity = {
+		Name = "Manaic Rush",
+		Asset = "https://github.com/eliazbp92-collab/Mayhem-mode/raw/main/Manic%20rush.rbxm",
+		HeightOffset = 0
+	},
+	Lights = {
+		Flicker = {
+			Enabled = true,
+			Duration = 30
+		},
+		Shatter = true,
+		Repair = false
+	},
+	Earthquake = {
+		Enabled = false
+	},
+	CameraShake = {
+		Enabled = true,
+		Range = 100,
+		Values = {3, 20, 0.1, 1} -- Magnitude, Roughness, FadeIn, FadeOut
+	},
+	Movement = {
+		Speed = 150,
+		Delay = 4,
+		Reversed = false
+	},
+	Rebounding = {
+		Enabled = true,
+		Type = "Ambush", -- "Blitz"
+		Min = 1,
+		Max = 1,
+		Delay = 0
+	},
+	Damage = {
+		Enabled = true,
+		Range = 40,
+		Amount = 0.0001
+	},
+	Crucifixion = {
+		Enabled = true,
+		Range = 80,
+		Resist = false,
+		Break = true
+	},
+	Death = {
+		Type = "Guiding", -- "Curious"
+		Hints = {"", "", "", ""},
+		Cause = ""
+	}
+})
+
+---====== Debug entity ======---
+
+entity:SetCallback("OnSpawned", function()
+	print("Entity has spawned")
+end)
+
+entity:SetCallback("OnStartMoving", function()
+	print("Entity has started moving")
+	thread = task.spawn(function()
+		while true do
+			task.wait(0.3)
+			
+			local model = workspace:WaitForChild("Manaic Rush")
+			local part = model:FindFirstChild("RushNew")
+			model.RushNew.CanCollide = false
+			local player = game.Players.LocalPlayer
+			local char = player.Character
+			local hum = char and char:FindFirstChildOfClass("Humanoid")
+			local hrp = char and char:FindFirstChild("HumanoidRootPart")
+			local is = false
+			is = true
+
+			if hum and hrp and (hrp.Position - part.Position).Magnitude <= 9 and hum.Health > 0 and is == true and not game.Players.LocalPlayer.Character:GetAttribute("Hiding") then
+				local workspace = game:GetService("Workspace")
+				is = false
+				local Players = game:GetService("Players")
+				local LocalPlayer = Players.LocalPlayer
+				local playerGui = LocalPlayer:WaitForChild("PlayerGui", 10)
+				if not playerGui then return end
+
+				local mainUI = playerGui:FindFirstChild("MainUI")
+				if not mainUI then return end
+
+				local jumpscareRush = mainUI:FindFirstChild("Jumpscare") and mainUI.Jumpscare:FindFirstChild("Jumpscare_Rush")
+				if not jumpscareRush then return end
+
+				local imageLabel = jumpscareRush:FindFirstChild("ImageLabel")
+				local imageLabelBig = jumpscareRush:FindFirstChild("ImageLabelBig")
+
+				if imageLabel then
+					imageLabel.ImageColor3 = Color3.fromRGB(255, 0, 0)
+					imageLabel.Image = "rbxassetid://18344412652"
+				end
+
+				pcall(function()
+					mainUI.Initiator.Main_Game.RemoteListener.Jumpscares.Rush.Jumpscare_Rush2.PlaybackSpeed = 0.5
+				end)
+
+				if imageLabelBig then
+					imageLabelBig.ImageColor3 = Color3.fromRGB(255, 0, 0)
+				end
+
+				-- Hiệu ứng rung màn hình (Đã thêm task.wait để không bị crash)
+				if imageLabel then
+					task.spawn(function()
+						local origin = imageLabel.Position
+						local delayTime = 0.05
+
+						while imageLabel and imageLabel.Parent do
+							imageLabel.Position = origin + UDim2.new(0, math.random(-10, 10), 0, math.random(-10, 10))
+							imageLabel.Rotation = Random.new():NextInteger(-10,10)
+							task.wait(delayTime) -- [ĐÃ FIX]: Thêm task.wait() để giải phóng bộ nhớ!
+						end
+					end)
+				end
+				
+				if imageLabelBig.Visible == true then
+					jumpscareRush.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+					wait(0.025)
+					jumpscareRush.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+					wait(0.025)
+				end
+
+				-- Kích hoạt Jumpscare Rush an toàn
+				pcall(function()
+					local main_game = require(LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game)
+					require(LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game.RemoteListener.Jumpscares.Rush)(main_game)
+				end)
+
+				-- Trừ máu nhân vật an toàn
+				local character = LocalPlayer.Character
+				if character then
+					local humanoid = character:FindFirstChildOfClass("Humanoid")
+					if humanoid then
+						humanoid.Health = math.max(0, humanoid.Health - 1000)
+						is = true
+						entity:Resume()
+					end
+				end
+
+				-- Đặt nguyên nhân cái chết
+				pcall(function()
+					game:GetService("ReplicatedStorage").GameStats["Player_".. LocalPlayer.Name].Total.DeathCause.Value = "Manaic Rush"
+				end)
+
+			end
+		end
+	end)
+end)
+
+entity:SetCallback("OnEnterRoom", function(room: Model, firstTime: boolean)
+	if firstTime == true then
+		print("Entity has entered room: ".. room.Name.. " for the first time")
+	else
+		print("Entity has entered room: ".. room.Name.. " again")
+	end
+end)
+
+entity:SetCallback("OnLookAt", function(lineOfSight: boolean)
+	if lineOfSight == true then
+		print("Player is looking at entity")
+	else
+		print("Player view is obstructed by something")
+	end
+end)
+
+entity:SetCallback("OnRebounding", function(startOfRebound: boolean)
+	if startOfRebound == true then
+		print("Entity has started rebounding")
+	else
+		print("Entity has finished rebounding")
+	end
+end)
+
+entity:SetCallback("OnDespawning", function()
+	print("Entity is despawning")
+	if thread then
+		task.cancel(thread)
+		thread = nil
+	end
+	
+	if threada then
+		task.cancel(threada)
+		threada = nil
+	end
+end)
+
+entity:SetCallback("OnDespawned", function()
+	print("Entity has despawned")
+end)
+
+local damage = false
+
+entity:SetCallback("OnDamagePlayer", function(newHealth: number)
+	if newHealth <= 0 then
+		print("Entity has killed the player")
+	else
+		print("Entity has damaged the player")
+		damage = true
+		while damage == true do
+			wait(0.1)
+		local TweenService = game:GetService("TweenService")
+		local Players = game:GetService("Players")
+		local RunService = game:GetService("RunService")
+		local TweenService = game:GetService("TweenService")
+		local Lighting = game:GetService("Lighting")
+		local Debris = game:GetService("Debris")
+		local UserInputService = game:GetService("UserInputService")
+
+		local Players = game:GetService("Players")
+		local TweenService = game:GetService("TweenService")
+
+		local player = Players.LocalPlayer
+		local playerGui = player:WaitForChild("PlayerGui")
+
+		local player = Players.LocalPlayer
+		local model = workspace:WaitForChild("Manaic Rush")
+		local part = model:FindFirstChild("RushNew") or model:FindFirstChildWhichIsA("BasePart")
+		if not part then return end
+
+		local chr = player.Character or player.CharacterAdded:Wait()
+		local hrp = chr:WaitForChild("HumanoidRootPart")
+
+		part.Anchored = true
+
+		local SPEED_STUDS_PER_SECOND = 150
+		local targetCFrame = hrp.CFrame
+		local distance = (targetCFrame.Position - part.Position).Magnitude
+		local duration = distance / SPEED_STUDS_PER_SECOND
+
+		if duration <= 0 then
+			duration = 0.05
+		end
+
+		local tween = TweenService:Create(
+			part,
+			TweenInfo.new(duration, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut),
+			{CFrame = targetCFrame}
+		)
+
+		tween:Play()
+		tween.Completed:Wait()
+			if game.Players.LocalPlayer.Character:GetAttribute("Hiding") then
+				tween:Destroy()
+				damage = false
+			end
+		end
+	end
+end)
+
+--[[
+
+DEVELOPER NOTE:
+By overwriting 'CrucifixionOverwrite' the default crucifixion callback will be replaced with your custom callback.
+
+entity:SetCallback("CrucifixionOverwrite", function()
+    print("Custom crucifixion callback")
+end)
+
+]]--
+
+---====== Run entity ======---
+
+entity:Run(true)

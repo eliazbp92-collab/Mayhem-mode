@@ -111,7 +111,6 @@ end)
 
 entity:SetCallback("OnDespawning", function()
     print("Entity is despawning")
-game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
 end)
 
 entity:SetCallback("OnDespawned", function()

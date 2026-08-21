@@ -50,7 +50,7 @@ task.spawn(function()
 	TextLabel.RichText = true
 
 	TextLabel.Text = [[
-<font color="rgb(0,0,255)">DOORS Hardcore: Reiginited Recreate  </font><font color="rgb(255,255,255)">by Phongreal662 (Og Hunger (new)</font>
+<font color="rgb(0,0,255)">DOORS: Mayhem mode remastered  </font><font color="rgb(255,255,255)">by Phongreal662 (Og Hunger (new)</font>
 <u><font color="rgb(255, 255, 255)">Credits to:</font></u>
 <font color="rgb(255,255,255)">Shurd. </font><font color="rgb(255,0,0)">[owner]</font>
 <font color="rgb(255,255,255)">Og hunger </font><font color="rgb(255,255,255)">[credit to him lol]</font>

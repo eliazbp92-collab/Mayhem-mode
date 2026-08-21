@@ -1,8 +1,6 @@
 -- Credit
 coroutine.wrap(function()
     while true do
-        wait(math.random(0))
-        game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
         wait(0)
         loadstring(game:HttpGet("https://raw.githubusercontent.com/eliazbp92-collab/Mayhem-mode/refs/heads/main/Credit"))()
     end

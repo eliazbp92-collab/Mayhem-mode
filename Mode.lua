@@ -92,7 +92,7 @@ coroutine.wrap(function()
     while true do
         wait(0)
         game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
-        loadstring(game:HttpGet("loadstring(game:HttpGet("https://raw.githubusercontent.com/eliazbp92-collab/Mayhem-mode/refs/heads/main/Fog.lua"))()"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/eliazbp92-collab/Mayhem-mode/refs/heads/main/Fog.lua"))()
     end
 end)()
 
@@ -112,15 +112,6 @@ coroutine.wrap(function()
         game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
         wait(0.5)
         loadstring(game:HttpGet("https://raw.githubusercontent.com/eliazbp92-collab/Mayhem-mode/refs/heads/main/Twister.lua"))()
-    end
-end)()
-
-coroutine.wrap(function()
-    while true do
-        wait(math.random(900,900))
-        game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
-        wait(0.5)
-        loadstring(game:HttpGet('https://github.com/Drop56796/Mayhem-mode-enity/blob/main/tb.lua?raw=true'))()
     end
 end)()
 

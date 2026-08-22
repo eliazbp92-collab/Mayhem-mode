@@ -91,6 +91,7 @@ end)()
 coroutine.wrap(function()
     while true do
         wait(0)
+        game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
         loadstring(game:HttpGet("loadstring(game:HttpGet("https://raw.githubusercontent.com/eliazbp92-collab/Mayhem-mode/refs/heads/main/Fog.lua"))()"))()
     end
 end)()
